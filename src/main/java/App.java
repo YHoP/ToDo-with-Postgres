@@ -67,13 +67,7 @@ public class App {
 
     int categoryId = Integer.parseInt(request.queryParams("categoryId"));
     Category category = Category.find(categoryId);
-    category.save();
     List<Task> tasks = category.getTasks();
-
-    // if (tasks == null) {
-    //   tasks = new List<Task>();
-    //   request.session().attribute("tasks", categoryId);
-    // }
 
     String description = request.queryParams("description");
     Task newTask = new Task(description, categoryId);
