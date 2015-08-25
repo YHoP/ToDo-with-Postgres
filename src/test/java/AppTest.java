@@ -16,9 +16,9 @@ public class AppTest extends FluentTest {
       return webDriver;
   }
 
-  // @ClassRule
-  // public static ServerRule server = new ServerRule();
-  //
+  @ClassRule
+  public static ServerRule server = new ServerRule();
+
   // @Rule
   // public ClearRule clearRule = new ClearRule();
 
@@ -49,7 +49,8 @@ public class AppTest extends FluentTest {
   @Test
   public void categoryIsDisplayedTest() {
     Category myCategory = new Category("Household chores");
-    String categoryPath = String.format("http://localhost:4567/%d", myCategory.getId());
+    myCategory.save();
+    String categoryPath = String.format("http://localhost:4567/categories/%d", myCategory.getId());
     goTo(categoryPath);
     assertThat(pageSource()).contains("Household chores");
   }
@@ -62,7 +63,7 @@ public class AppTest extends FluentTest {
     firstTask.save();
     Task secondTask = new Task("Do the dishes", myCategory.getId());
     secondTask.save();
-    String categoryPath = String.format("http://localhost:4567/%d", myCategory.getId());
+    String categoryPath = String.format("http://localhost:4567/categories/%d", myCategory.getId());
     goTo(categoryPath);
     assertThat(pageSource()).contains("Mow the lawn");
     assertThat(pageSource()).contains("Do the dishes");
