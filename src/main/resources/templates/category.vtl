@@ -1,14 +1,20 @@
 <h3>$category.getName()</h3>
 
+<ol>
 #foreach($task in $category.getTasks())
- <h4>$task.getDescription()</a></h4><br>
+ <li>$task.getDescription()</li>
 #end
+</ol>
+
 
 <br>
-<a href="/categories/$category.getId()/tasks/new">Add a new task</a>
+<form action="/categories/$category.getId()/delete" method="post">
+  <button type="submit" class="btn btn-danger">Delete this category</button>
+</form>
+
+<form action="/categories/$category.getId()/update">
+  <button type="submit" class="btn btn-info">Update this category</button>
+</form>
+
 <br>
-<a href="/categories/new">Add a new category</a>
-<br>
-<a href="/categories">View all categories</a><br>
-<br>
-<a href="/">Return to Main Page</a>
+<a href="/">Main Page</a>
