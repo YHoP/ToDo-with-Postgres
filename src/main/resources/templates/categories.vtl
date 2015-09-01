@@ -1,16 +1,18 @@
-<h1>Categories list!</h1>
+<h2>Categories</h2>
 
-<p>Add a new category:</p>
-
-<form action="/categories" method="post">
-  <label for="name">Task Description</label>
-  <input id="name" name="name" type="text">
-
-  <button type="submit">Add category</button>
+<form action='/categories' method='post'>
+  <label for='name'>Add a category  </label>
+  <input id='name' name='name' type='text'>
+  <button type='submit' class='btn btn-success'>Add</button>
 </form>
 
-#foreach ($category in $categories)
-  <li><a href="/categories/$category.getId()">$category.getName()</a></li>
-#end
-
-<p><a href='/'>Home</a></p>
+<br>
+<table style='width:50%'>
+  #foreach ($category in $categories)
+  <tr>
+    <td><a href='/categories/$category.getId()'><span class="glyphicon glyphicon-pencil"></span>)</a></td>
+    <td><a href='/categories/$category.getId()'>$category.getName()</a></td>
+    <td><a href='/delete_categories/$category.getId()'><span class="glyphicon glyphicon-remove"></span></a></td>
+  </tr>
+  #end
+</table>

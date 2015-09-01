@@ -1,16 +1,24 @@
-a:link {
-	color: white;
-    text-decoration: none;
+.btn {
+  color: white;
+  text-decoration: none;
 }
-a:visited{
-	color: white;
-    text-decoration: none;
+
+table {
+  padding:20px;
+  width: 60%;
+	background-color: #ffffcc;
+  box-shadow: 0 0 10px #777777;
+  -moz-box-shadow: 0 0 10px #777777;
+  -webkit-box-shadow: 0 0 10px #777777;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
 }
-a:hover{
-	color: white;
-    text-decoration: none;
+
+td {
+  padding: 10px;
 }
-a:active{
-	color: white;
-    text-decoration: none;
+
+.center{
+    text-align: center;
 }

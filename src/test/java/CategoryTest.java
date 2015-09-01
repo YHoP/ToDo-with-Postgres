@@ -37,6 +37,8 @@ public class CategoryTest {
     assertTrue(myCategory.equals(savedCategory));
   }
 
+
+  // new tests below
   @Test
   public void addTask_addsTaskToCategory() {
     Category myCategory = new Category("Household chores");
@@ -74,6 +76,15 @@ public class CategoryTest {
     myCategory.addTask(myTask);
     myCategory.delete();
     assertEquals(myTask.getCategories().size(), 0);
+  }
+
+  @Test
+  public void update_updateCategoryCorrectly_true(){
+    Category myCategory = new Category("Household chores");
+    myCategory.save();
+    myCategory.update("Work");
+    assertTrue(Category.all().get(0).getName().equals("Work"));
+
   }
 
 }

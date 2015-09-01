@@ -56,4 +56,19 @@ public class TaskTest {
     assertEquals(myCategory.getTasks().size(), 0);
   }
 
+  @Test
+  public void update_updateTaskCorrectly_true(){
+    Task myTask = new Task("Household chores");
+    myTask.save();
+    myTask.update("Work");
+    assertTrue(Task.all().get(0).getDescription().equals("Work"));
+  }
+
+  @Test
+  public void complete_completeTaskBoolean_true(){
+    Task myTask = new Task("Mow the lawn");
+    myTask.save();
+    myTask.complete();
+    assertEquals(true, Task.all().get(0).getComplete());
+  }
 }

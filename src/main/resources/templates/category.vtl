@@ -1,27 +1,56 @@
-<h1>$category.getName()</h1>
+<h3>Category : $category.getName()</h3>
 
-#if($category.getTasks())
-  <p>Here are the tasks for this category:</p>
-  <ul>
-    #foreach($task in $category.getTasks())
-      <li>$task.getDescription()<li>
-    #end
-  </ul>
-#end
-
-<h4>Add a task to this category:</h4>
-
+<form action='/update_category/$category.getId()' method='post'>
+  <label for='name'>Name : </label>
+  <input id='name' name='name' type='text' value='$category.getName()'>
+  <button type='submit'>Edit</button>
+</form>
+<br>
 <form action='/add_tasks' method='post'>
-    <input id="category_id" name="category_id" type="hidden" value="$category.getId()">
-    <label for="task_id">Select a task</label>
+    <input id='category_id' name='category_id' type='hidden' value='$category.getId()'>
+    <label for='task_id'>Add a task : </label>
     <select id='task_id' name='task_id' type='text'>
       #foreach($task in $allTasks)
-        <option value="$task.getId()"> $task.getDescription() </option>
+        <option value='$task.getId()'> $task.getDescription() </option>
       #end
     </select>
-    <button type='submit'>Add task</button>
+    <button type='submit'>Add</button>
 </form>
-
-<p><a href="/categories/$category.getId()/edit">Edit this category</a></p>
-
-<p><a href='/'>Home</a></p>
+<br>
+#if($category.getTasks())
+<h4>List of tasks: </h4>
+<table style='width:50%'>
+#foreach($task in $incompletedCategoryTasks)
+<tr>
+  <td><a href='/$category.getId()/isCompleted_tasks/$task.getId()'><span class='glyphicon glyphicon-unchecked'></span></a></td>
+  <td><a href='/update_tasks/$task.getId()'><span class='glyphicon glyphicon-pencil'></span></a></td>
+  <td><a href='/tasks/$task.getId()'>$task.getDescription()</a></td>
+  <td><span class='glyphicon glyphicon-calendar'></span>
+      #if($task.getDueDate())
+        $task.getDueDate()
+      #else
+      #end
+    </td>
+  <td><a href='/$category.getId()/delete_tasks/$task.getId()'><span class='glyphicon glyphicon-remove'></span></a></td>
+</tr>
+#end
+</table>
+<br>
+<h4>List of completed tasks: </h4>
+<table style='width:50%'>
+#foreach($task in $completedCategoryTasks)
+<tr>
+  <td><a href='/$category.getId()/isNotCompleted_tasks/$task.getId()'><span class='glyphicon glyphicon-check'></span></a></td>
+  <td><a href='/update_tasks/$task.getId()'><span class='glyphicon glyphicon-pencil'></span></a></td>
+  <td><a href='/tasks/$task.getId()'>$task.getDescription()</a></td>
+  <td><span class='glyphicon glyphicon-calendar'></span>
+      #if($task.getDueDate())
+        $task.getDueDate()
+      #else
+      #end
+    </td>
+  <td><a href='/$category.getId()/delete_tasks/$task.getId()'><span class='glyphicon glyphicon-remove'></span></a></td>
+</tr>
+#end
+</table>
+#end

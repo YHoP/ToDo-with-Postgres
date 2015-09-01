@@ -5,7 +5,8 @@ import org.sql2o.*;
 
 public class Task {
   private int id;
-  private String description;
+  private String description, dueDate;
+  private boolean isCompleted;
 
   public int getId() {
     return id;
@@ -15,8 +16,17 @@ public class Task {
     return description;
   }
 
+  public boolean getComplete(){
+    return isCompleted;
+  }
+
+  public String getDueDate(){
+    return dueDate;
+  }
+
   public Task(String description) {
     this.description = description;
+    isCompleted = false;
   }
 
   @Override
@@ -26,13 +36,15 @@ public class Task {
     } else {
       Task newTask = (Task) otherTask;
       return this.getDescription().equals(newTask.getDescription()) &&
-             this.getId() == newTask.getId();
+             this.getId() == newTask.getId() &&
+             this.getComplete() == newTask.getComplete() &&
+             this.getDueDate() == newTask.getDueDate();
     }
   }
 
 
   public static List<Task> all() {
-    String sql = "SELECT id, description FROM tasks";
+    String sql = "SELECT * FROM tasks ORDER BY dueDate";
     try(Connection con = DB.sql2o.open()) {
       return con.createQuery(sql).executeAndFetch(Task.class);
     }
@@ -40,7 +52,7 @@ public class Task {
 
   public void save() {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "INSERT INTO tasks(description) VALUES (:description)";
+      String sql = "INSERT INTO tasks (description) VALUES (:description)";
       this.id = (int) con.createQuery(sql, true)
         .addParameter("description", description)
         .executeUpdate()
@@ -60,7 +72,7 @@ public class Task {
 
   public void update(String description) {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "UPDATE tasks SET description = :description) WHERE id = :id";
+      String sql = "UPDATE tasks SET description = :description WHERE id = :id";
       con.createQuery(sql)
         .addParameter("description", description)
         .addParameter("id", id)
@@ -68,6 +80,7 @@ public class Task {
     }
   }
 
+  // addCategory method
   public void addCategory(Category category) {
     try(Connection con = DB.sql2o.open()) {
       String sql = "INSERT INTO categories_tasks (category_id, task_id) VALUES (:category_id, :task_id)";
@@ -78,6 +91,7 @@ public class Task {
     }
   }
 
+  // getCategories changed
   public ArrayList<Category> getCategories() {
     try(Connection con = DB.sql2o.open()){
       String sql = "SELECT category_id FROM categories_tasks WHERE task_id = :task_id";
@@ -98,6 +112,7 @@ public class Task {
     }
   }
 
+  // delete also changed
   public void delete() {
     try(Connection con = DB.sql2o.open()) {
       String deleteQuery = "DELETE FROM tasks WHERE id = :id;";
@@ -109,6 +124,50 @@ public class Task {
         con.createQuery(joinDeleteQuery)
           .addParameter("taskId", this.getId())
           .executeUpdate();
+    }
+  }
+
+  public void isCompleted() {
+    isCompleted = true;
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE tasks SET iscompleted = true WHERE id = :id";
+      con.createQuery(sql)
+        .addParameter("id", id)
+        .executeUpdate();
+    }
+  }
+
+  public static List<Task> completedTasks() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT * FROM tasks WHERE iscompleted = true ORDER BY duedate";
+      return con.createQuery(sql).executeAndFetch(Task.class);
+    }
+  }
+
+  public void isNotCompleted() {
+    isCompleted = false;
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE tasks SET iscompleted = false WHERE id = :id";
+      con.createQuery(sql)
+        .addParameter("id", id)
+        .executeUpdate();
+    }
+  }
+
+  public static List<Task> incompletedTasks() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT * FROM tasks WHERE iscompleted = false ORDER BY duedate";
+      return con.createQuery(sql).executeAndFetch(Task.class);
+    }
+  }
+
+  public void dueDate(String setDate) {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE tasks SET dueDate = :dueDate WHERE id = :id";
+      con.createQuery(sql)
+        .addParameter("dueDate", setDate)
+        .addParameter("id", id)
+        .executeUpdate();
     }
   }
 

@@ -56,6 +56,17 @@ public class Category {
     }
   }
 
+  public void update(String name) {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE Categories SET name = :name WHERE id = :id";
+      con.createQuery(sql)
+        .addParameter("name", name)
+        .addParameter("id", id)
+        .executeUpdate();
+    }
+  }
+
+  //after deleting category_id, he added addTask
   public void addTask(Task task) {
     try(Connection con = DB.sql2o.open()) {
       String sql = "INSERT INTO categories_tasks (category_id, task_id) VALUES (:category_id, :task_id)";
@@ -66,6 +77,7 @@ public class Category {
     }
   }
 
+  // getTask also changed
   public ArrayList<Task> getTasks() {
     try(Connection con = DB.sql2o.open()){
       String sql = "SELECT task_id FROM categories_tasks WHERE category_id = :category_id";
@@ -86,9 +98,10 @@ public class Category {
     }
   }
 
+  // delete also changed
   public void delete() {
     try(Connection con = DB.sql2o.open()) {
-      String deleteQuery = "DELETE FROM categories WHERE id = :id;";
+      String deleteQuery = "DELETE FROM categories WHERE id = :id";
         con.createQuery(deleteQuery)
           .addParameter("id", id)
           .executeUpdate();
@@ -97,6 +110,20 @@ public class Category {
         con.createQuery(joinDeleteQuery)
           .addParameter("categoryId", this.getId())
           .executeUpdate();
+    }
+  }
+
+  public static List<Task> completedCategoryTasks() {
+    try(Connection con = DB.sql2o.open()) {
+      String joinQuery = "SELECT tasks.* FROM categories JOIN categories_tasks ON (categories.id=categories_tasks.category_id) JOIN tasks ON (categories_tasks.task_id = tasks.id) WHERE tasks.iscompleted = true ORDER BY duedate";
+      return con.createQuery(joinQuery).executeAndFetch(Task.class);
+    }
+  }
+
+  public static List<Task> incompletedCategoryTasks() {
+    try(Connection con = DB.sql2o.open()) {
+      String joinQuery = "SELECT tasks.* FROM categories JOIN categories_tasks ON (categories.id=categories_tasks.category_id) JOIN tasks ON (categories_tasks.task_id = tasks.id) WHERE tasks.iscompleted = false ORDER BY duedate";
+      return con.createQuery(joinQuery).executeAndFetch(Task.class);
     }
   }
 
