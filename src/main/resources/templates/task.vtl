@@ -5,11 +5,12 @@
   <input id='description' name='description' type='text'>
   <button type='submit'> Edit</button>
 </form>
-
+<br>
 #if($task.getDueDate())
 <h4><span class='glyphicon glyphicon-calendar'></span>  Due date:  $task.getDueDate()</h4>
 #else
 #end
+<br>
 <form action='/dueDate_tasks/$task.getId()' method='post'>
     <input type='date' name='dueDate'/>
     <button type='submit'> Set due date</button>

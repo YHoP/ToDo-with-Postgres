@@ -52,9 +52,10 @@ public class Task {
 
   public void save() {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "INSERT INTO tasks (description) VALUES (:description)";
+      String sql = "INSERT INTO tasks (description, iscompleted) VALUES (:description, :iscompleted)";
       this.id = (int) con.createQuery(sql, true)
         .addParameter("description", description)
+        .addParameter("iscompleted", isCompleted)
         .executeUpdate()
         .getKey();
     }

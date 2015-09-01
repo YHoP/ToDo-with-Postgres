@@ -11,7 +11,7 @@ public class App {
     staticFileLocation("/public");
     String layout = "templates/layout.vtl";
 
-    get("/", (request, response) -> {
+    get("/categories", (request, response) -> {
       HashMap<String, Object> model = new HashMap<String, Object>();
       List<Category> categories = Category.all();
       model.put("categories", categories);

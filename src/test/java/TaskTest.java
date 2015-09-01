@@ -68,7 +68,7 @@ public class TaskTest {
   public void complete_completeTaskBoolean_true(){
     Task myTask = new Task("Mow the lawn");
     myTask.save();
-    myTask.complete();
+    myTask.isCompleted();
     assertEquals(true, Task.all().get(0).getComplete());
   }
 }
